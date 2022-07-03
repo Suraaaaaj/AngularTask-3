@@ -1,0 +1,22 @@
+<div class="container details-card d-flex ms-auto">
+    <strong>{{user.firstname + " " + user.lastname | titlecase }}</strong>
+    <span [ngStyle]= "user.isdeleted? {'color': 'red'}: {'color': 'green'}"> {{ user.isdeleted | statusPipe }}</span>
+    <table>
+        <tr>
+            <td>{{ "login id" | titlecase }}</td>
+            <td>{{user.login}}</td>
+        </tr>
+        <tr>
+            <td>{{"first name" | titlecase}}</td>
+            <td>{{user.firstname}}</td>
+        </tr>
+        <tr>
+            <td>{{"last name" | titlecase}}</td>
+            <td>{{user.lastname}}</td>
+        </tr>
+        <tr>
+            <td>{{"age" | titlecase}}</td>
+            <td>{{user.age}}</td>
+        </tr>
+    </table>
+</div>
