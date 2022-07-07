@@ -1,5 +1,5 @@
-<app-spinner *ngIf="loading"></app-spinner>
-<strong> {{routeState.user.firstname + " "+  routeState.user.lastname | titlecase}}</strong>
+<app-mspinner *ngIf="loading"></app-mspinner>
+<strong> {{user.firstname + " "+  user.lastname | titlecase}}</strong>
 
 <form  [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
     <div>

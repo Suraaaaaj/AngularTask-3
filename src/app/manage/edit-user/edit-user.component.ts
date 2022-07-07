@@ -12,20 +12,35 @@ import { GlobalConstants } from 'src/app/globalConstants';
 })
 export class EditUserComponent implements OnInit {
 
-  routeState: any;
+  
   myForm!: FormGroup;
   currUserID: any;
   baseURL: string = GlobalConstants.apiURL;
   result: any;
   loading: boolean = false;
+  user: User = {
+    id: 'null',
+    login:'null',
+    password:'null',
+    firstname:'null',
+    lastname:'null',
+    age:0,
+    isdeleted: false
+  }
+
   constructor(
       private router: Router,
       private fb: FormBuilder,
       private route: ActivatedRoute,
       private http: HttpClient
       ) { 
-    this.routeState = this.router.getCurrentNavigation()?.extras.state;
-    console.log(this.routeState);
+     this.currUserID = this.route.snapshot.params['id'];
+    this.http.get<User>(this.baseURL + this.currUserID)
+          .subscribe((data) =>
+          {
+            this.user = data;
+          }
+          );
   }
 
   ngOnInit(): void {
@@ -40,12 +55,12 @@ export class EditUserComponent implements OnInit {
     this.currUserID = this.route.snapshot.params['id'];
     let body: User = {
       id: this.currUserID,
-      login: this.routeState.user.login,
+      login: this.user.login,
       password: form.value.password,
-      firstname: this.routeState.user.firstname,
-      lastname: this.routeState.user.lastname,
+      firstname: this.user.firstname,
+      lastname: this.user.lastname,
       age: form.value.age,
-      isdeleted: this.routeState.user.isdeleted,
+      isdeleted: this.user.isdeleted,
     }
 
     this.result = await this.http.put(this.baseURL + this.currUserID, body).toPromise();
