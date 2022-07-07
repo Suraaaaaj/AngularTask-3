@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/user';
+import { GlobalConstants } from 'src/app/globalConstants';
 
 @Component({
   selector: 'app-create-user',
@@ -14,8 +15,9 @@ export class CreateUserComponent implements OnInit {
   routeState: any;
   createUserForm!: FormGroup;
   currUserID: any;
-  baseURL: string = "http://localhost:8080/users/";
-
+  baseURL: string = GlobalConstants.apiURL;
+  result : any;
+  loading: boolean = false;
   constructor(
       private router: Router,
       private fb: FormBuilder,
@@ -37,6 +39,7 @@ export class CreateUserComponent implements OnInit {
   }
 
   async onSubmit(form: FormGroup) {
+    this.loading = true;
     let body: User = {
       id: form.value.id,
       login: form.value.login,
@@ -47,11 +50,10 @@ export class CreateUserComponent implements OnInit {
       isdeleted: false,
     }
 
-    await this.http.post(this.baseURL + "/addUser", body)
-      .subscribe((data)=> {
-        console.log(data);
-        this.router.navigate(['manage']);
-      });
+   this.result = await this.http.post(this.baseURL + "/addUser", body).toPromise();
+   this.loading = false;
+   this.router.navigate(['active']);
+      
    
   }
 

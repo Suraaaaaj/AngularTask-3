@@ -1,4 +1,5 @@
-<div class="container p-5" *ngIf="allowedUser" [ngStyle]="{'border':myBorder}">
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="container p-5" [ngStyle]="{'border':myBorder}">
     <strong class="row">
         {{ curr.firstname | titlecase | fullNamePipe: (curr.lastname | titlecase)  }}     </strong>
     <button class="btn btn-warning " *ngIf="this.currRoute.split('/')[1]=='manage'" (click)="editUser()">Edit</button>

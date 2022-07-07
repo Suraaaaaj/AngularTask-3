@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalConstants } from '../globalConstants';
 import { User } from '../user';
 @Component({
   selector: 'app-user',
@@ -14,7 +15,9 @@ export class UserComponent implements OnInit {
   allowedUser = false;
   myBorder : any;
   myRoute: string = "";
-  baseURL: string = "http://localhost:8080/users/";
+  baseURL = GlobalConstants.apiURL;
+  result!: any;
+  loading: boolean = false;  
   constructor(private router: Router,
               private route: ActivatedRoute,
               private http: HttpClient) {
@@ -22,19 +25,15 @@ export class UserComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    if(this.currRoute=='/active' && this.curr.isdeleted == false){
-      this.allowedUser =  true;
+    if(this.currRoute=='/active'){
       this.myBorder = '1px solid #69c369';
-    }else if(this.currRoute=='/deleted' && this.curr.isdeleted == true){
-      this.allowedUser =  true;
+    }else if(this.currRoute=='/deleted'){
       this.myBorder = '1px solid #cb4747';
+
     }else if(this.currRoute=="/manage" || this.currRoute.split('/').length==3) {
-      
-      this.allowedUser = true;
       if(this.curr.isdeleted == true) this.myBorder = '1px solid #cb4747';
       else this.myBorder = '1px solid #69c369';
     }
-    // console.log(this.router);
   }
 
   getUserStatus(){
@@ -47,21 +46,22 @@ export class UserComponent implements OnInit {
     }
   }
 
-  changeStatusOrViewDetails(){
+  async changeStatusOrViewDetails(){
+    this.loading = true;
    if(this.currRoute == '/active' || this.currRoute == "/deleted"){
 
       this.myRoute = this.currRoute =='/active'? "deactivate/":"activate/";
 
-      this.http.put(this.baseURL + this.myRoute + this.curr.id,"")
-            .subscribe((data) => console.log(data));
-
+      this.result = await this.http.put<any>(this.baseURL + this.myRoute + this.curr.id, "").toPromise()
+      this.loading = false;
       let currentUrl = this.router.url;
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      await this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate([currentUrl], {relativeTo:this.route});
       });
 
    }else{
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.loading = false; 
+      await this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/manage/'+ this.curr.id]);
       });
    }

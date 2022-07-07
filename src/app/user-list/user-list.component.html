@@ -1,5 +1,6 @@
-    <div class="mb-1 container" *ngFor="let user of users">
-        <div>
-            <app-user [curr]="user"></app-user>
-        </div>
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="mb-1 container" *ngFor="let user of users">
+    <div>
+        <app-user [curr]="user"></app-user>
+    </div>
 </div>

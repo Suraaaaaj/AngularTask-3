@@ -10,6 +10,7 @@ import { UserDetailsComponent } from './manage/user-details/user-details.compone
 import { FullNamePipePipe } from './pipe/full-name-pipe.pipe';
 import { StatusPipePipe } from './pipe/status-pipe.pipe';
 import { HttpClientModule } from '@angular/common/http';
+import { SpinnerComponent } from './spinner/spinner.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
     UserDetailsComponent,
     FullNamePipePipe,
     StatusPipePipe,
-
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,

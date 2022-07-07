@@ -1,3 +1,4 @@
+<app-spinner *ngIf="loading"></app-spinner>
 <div class="container details-card d-flex ms-auto">
     <strong>{{user.firstname + " " + user.lastname | titlecase }}</strong>
     <span [ngStyle]= "user.isdeleted? {'color': 'red'}: {'color': 'green'}"> {{ user.isdeleted | statusPipe }}</span>

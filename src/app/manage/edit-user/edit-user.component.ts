@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { User } from 'src/app/user';
 import { HttpClient } from '@angular/common/http';
+import { GlobalConstants } from 'src/app/globalConstants';
 
 @Component({
   selector: 'app-edit-user',
@@ -14,8 +15,9 @@ export class EditUserComponent implements OnInit {
   routeState: any;
   myForm!: FormGroup;
   currUserID: any;
-  baseURL: string = "http://localhost:8080/users/";
-
+  baseURL: string = GlobalConstants.apiURL;
+  result: any;
+  loading: boolean = false;
   constructor(
       private router: Router,
       private fb: FormBuilder,
@@ -34,6 +36,7 @@ export class EditUserComponent implements OnInit {
   }
 
   async onSubmit(form: FormGroup) {
+    this.loading = true;
     this.currUserID = this.route.snapshot.params['id'];
     let body: User = {
       id: this.currUserID,
@@ -45,12 +48,11 @@ export class EditUserComponent implements OnInit {
       isdeleted: this.routeState.user.isdeleted,
     }
 
-    await this.http.put(this.baseURL + this.currUserID, body)
-      .subscribe((data)=> {
-        console.log(data);
-        this.router.navigate(['manage']);
-      });
-   
+    this.result = await this.http.put(this.baseURL + this.currUserID, body).toPromise();
+    console.log(this.result);
+    this.loading = false;
+    this.router.navigate(['manage']);
+
   }
 
 }
